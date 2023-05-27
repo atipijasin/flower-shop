@@ -22,4 +22,14 @@ class HumanBundlerTest {
             Bundle(10, Flower("Rose", "R12"), BigDecimal("12.99"))
         )
     }
+
+    @Test
+    fun `should correctly process single order with different type of bundles`() {
+        val result = HumanBundler().getBundlesFor("15 R12")
+
+        assertThat(result).containsExactlyInAnyOrder(
+            Bundle(5, Flower("Rose", "R12"), BigDecimal("6.99")),
+            Bundle(10, Flower("Rose", "R12"), BigDecimal("12.99"))
+        )
+    }
 }

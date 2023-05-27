@@ -16,14 +16,27 @@ class HumanBundler : Bundler {
     )
 
     override fun getBundlesFor(order: String): List<Bundle> {
-        val orderedFlowersAmount = order.split(" ")[0].toInt()
+        var orderedFlowersAmount = order.split(" ")[0].toInt()
         val orderedFlowersCode = order.split(" ")[1]
 
-        val bundle = availableBundles
+        val availableBundlesForFlower = availableBundles
             .filter { it.flower.code == orderedFlowersCode }
-            .filter { orderedFlowersAmount % it.flowersAmount == 0 }
-            .maxByOrNull { it.flowersAmount }!!
+            .sortedBy { it.flowersAmount }
+            .reversed()
 
-        return List(orderedFlowersAmount/bundle.flowersAmount) { bundle }
+        val result = mutableListOf<Bundle>()
+
+        while (orderedFlowersAmount > 0) {
+            for (bundle in availableBundlesForFlower) {
+                if((orderedFlowersAmount - bundle.flowersAmount) >= 0) {
+                    result.add(bundle)
+                    orderedFlowersAmount -= bundle.flowersAmount
+                    break
+                }
+            }
+        }
+
+
+        return result
     }
 }
