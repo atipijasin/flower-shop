@@ -13,7 +13,7 @@ class FlowerShopTest {
     @ParameterizedTest
     @MethodSource("provideSingleBundles")
     fun `should correctly generate invoice for single bundle orders`(input: String, expected: String) {
-        val shop = FlowerShop()
+        val shop = FlowerShop(Bundles())
 
         val invoice = shop.generateInvoiceFor(input)
 
