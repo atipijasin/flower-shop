@@ -16,26 +16,35 @@ class HumanBundler : Bundler {
     )
 
     override fun getBundlesFor(order: String): List<Bundle> {
-        var orderedFlowersAmount = order.split(" ")[0].toInt()
+        val orderedFlowersAmount = order.split(" ")[0].toInt()
         val orderedFlowersCode = order.split(" ")[1]
 
         val availableBundlesForFlower = availableBundles
             .filter { it.flower.code == orderedFlowersCode }
             .sortedBy { it.flowersAmount }
             .reversed()
+            .toMutableList()
 
         val result = mutableListOf<Bundle>()
 
-        while (orderedFlowersAmount > 0) {
-            for (bundle in availableBundlesForFlower) {
-                if((orderedFlowersAmount - bundle.flowersAmount) >= 0) {
+        var currentRemainingFlowers = orderedFlowersAmount
+        var clear = false
+
+        while (currentRemainingFlowers > 0) {
+            if (clear) { availableBundlesForFlower.removeAt(0) }
+            for ((index,bundle) in availableBundlesForFlower.withIndex()) {
+                if((currentRemainingFlowers - bundle.flowersAmount) >= 0) {
                     result.add(bundle)
-                    orderedFlowersAmount -= bundle.flowersAmount
+                    currentRemainingFlowers -= bundle.flowersAmount
+                    clear = false
                     break
+                } else if (index == availableBundlesForFlower.lastIndex) {
+                    currentRemainingFlowers = orderedFlowersAmount
+                    result.clear()
+                    clear = true
                 }
             }
         }
-
 
         return result
     }
