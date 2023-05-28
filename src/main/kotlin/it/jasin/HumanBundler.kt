@@ -16,34 +16,42 @@ class HumanBundler : Bundler {
     )
 
     override fun getBundlesFor(order: String): List<Bundle> {
-        val orderedFlowersAmount = order.split(" ")[0].toInt()
-        val orderedFlowersCode = order.split(" ")[1]
-
-        val availableBundlesForFlower = availableBundles
-            .filter { it.flower.code == orderedFlowersCode }
-            .sortedBy { it.flowersAmount }
-            .reversed()
-            .toMutableList()
-
         val result = mutableListOf<Bundle>()
 
-        var currentRemainingFlowers = orderedFlowersAmount
-        var clear = false
+        val orders = order.split("\n")
 
-        while (currentRemainingFlowers > 0) {
-            if (clear) { availableBundlesForFlower.removeAt(0) }
-            for ((index,bundle) in availableBundlesForFlower.withIndex()) {
-                if((currentRemainingFlowers - bundle.flowersAmount) >= 0) {
-                    result.add(bundle)
-                    currentRemainingFlowers -= bundle.flowersAmount
-                    clear = false
-                    break
-                } else if (index == availableBundlesForFlower.lastIndex) {
-                    currentRemainingFlowers = orderedFlowersAmount
-                    result.clear()
-                    clear = true
+        orders.forEach {
+            val resultForOrder = mutableListOf<Bundle>()
+            val orderedFlowersAmount = it.split(" ")[0].toInt()
+            val orderedFlowersCode = it.split(" ")[1]
+
+            val availableBundlesForFlower = availableBundles
+                .filter { it.flower.code == orderedFlowersCode }
+                .sortedBy { it.flowersAmount }
+                .reversed()
+                .toMutableList()
+
+
+            var currentRemainingFlowers = orderedFlowersAmount
+            var clear = false
+
+            while (currentRemainingFlowers > 0 && availableBundlesForFlower.isNotEmpty()) {
+                if (clear) { availableBundlesForFlower.removeAt(0) }
+                for ((index,bundle) in availableBundlesForFlower.withIndex()) {
+                    if((currentRemainingFlowers - bundle.flowersAmount) >= 0) {
+                        resultForOrder.add(bundle)
+                        currentRemainingFlowers -= bundle.flowersAmount
+                        clear = false
+                        break
+                    } else if (index == availableBundlesForFlower.lastIndex) {
+                        currentRemainingFlowers = orderedFlowersAmount
+                        resultForOrder.clear()
+                        clear = true
+                    }
                 }
             }
+            result.addAll(resultForOrder)
+            resultForOrder.clear()
         }
 
         return result

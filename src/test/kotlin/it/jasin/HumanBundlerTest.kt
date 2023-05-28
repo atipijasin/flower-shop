@@ -48,4 +48,12 @@ class HumanBundlerTest {
             Bundle(3, Flower("Tulip", "T58"), BigDecimal("5.95"))
         )
     }
+
+    @Test
+    fun `should correctly handle multiple lines`() {
+        assertThat(HumanBundler().getBundlesFor("10 R12\n9 L09")).containsExactlyInAnyOrder(
+            Bundle(10, Flower("Rose", "R12"), BigDecimal("12.99")),
+            Bundle(9, Flower("Lily", "L09"), BigDecimal("24.95")),
+         )
+    }
 }
