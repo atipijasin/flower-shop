@@ -13,19 +13,19 @@ class HumanBundlerTest {
 
     @BeforeEach
     fun setUp() {
-        every { bundleRepository.availableBundlesSortedByFlowersAmountFor("R12") } returns listOf(
+        every { bundleRepository.availableBundlesSortedByFlowersAmount("R12") } returns listOf(
             Bundle(10, Flower("Rose", "R12"), BigDecimal("12.99")),
             Bundle(5, Flower("Rose", "R12"), BigDecimal("6.99"))
 
         )
 
-        every { bundleRepository.availableBundlesSortedByFlowersAmountFor("L09") } returns listOf(
+        every { bundleRepository.availableBundlesSortedByFlowersAmount("L09") } returns listOf(
             Bundle(9, Flower("Lily", "L09"), BigDecimal("24.95")),
             Bundle(6, Flower("Lily", "L09"), BigDecimal("16.95")),
             Bundle(3, Flower("Lily", "L09"), BigDecimal("9.95"))
         )
 
-        every { bundleRepository.availableBundlesSortedByFlowersAmountFor("T58") } returns listOf(
+        every { bundleRepository.availableBundlesSortedByFlowersAmount("T58") } returns listOf(
             Bundle(9, Flower("Tulip", "T58"), BigDecimal("16.99")),
             Bundle(5, Flower("Tulip", "T58"), BigDecimal("9.95")),
             Bundle(3, Flower("Tulip", "T58"), BigDecimal("5.95"))
@@ -76,6 +76,15 @@ class HumanBundlerTest {
                 Bundle(5, Flower("Tulip", "T58"), BigDecimal("9.95")),
                 Bundle(3, Flower("Tulip", "T58"), BigDecimal("5.95"))
             )
+
+        assertThat(bundler.getBundlesFor("22 T58"))
+            .containsExactlyInAnyOrder(
+                Bundle(9, Flower("Tulip", "T58"), BigDecimal("16.99")),
+                Bundle(5, Flower("Tulip", "T58"), BigDecimal("9.95")),
+                Bundle(5, Flower("Tulip", "T58"), BigDecimal("9.95")),
+                Bundle(3, Flower("Tulip", "T58"), BigDecimal("5.95"))
+            )
+
     }
 
     @Test

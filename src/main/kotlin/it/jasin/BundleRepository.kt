@@ -1,5 +1,5 @@
 package it.jasin
 
 interface BundleRepository {
-    fun availableBundlesSortedByFlowersAmountFor(flowerCode: String): List<Bundle>
+    fun availableBundlesSortedByFlowersAmount(flowerCode: String): List<Bundle>
 }

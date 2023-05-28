@@ -14,7 +14,7 @@ class InMemoryBundleRepository : BundleRepository {
         Bundle(9, Flower("Tulip", "T58"), BigDecimal("16.99"))
     )
 
-    override fun availableBundlesSortedByFlowersAmountFor(flowerCode: String): List<Bundle> {
+    override fun availableBundlesSortedByFlowersAmount(flowerCode: String): List<Bundle> {
         return bundles
             .filter { it.flower.code == flowerCode }
             .sortedBy { it.flowersAmount }
