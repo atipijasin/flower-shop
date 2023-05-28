@@ -1,7 +1,6 @@
 package it.jasin
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -9,7 +8,8 @@ class ApplicationKtTest() {
     private val input = File("input.txt").readText()
     @Test
     fun `should correctly output complete test`() {
-        val bundler = HumanBundler()
+        val bundleRepository = InMemoryBundleRepository()
+        val bundler = HumanBundler(bundleRepository)
         val accountant = HumanAccountant()
 
         val result = FlowerShop(bundler, accountant).generateInvoiceFor(input)
